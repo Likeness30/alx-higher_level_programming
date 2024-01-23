@@ -1,24 +1,74 @@
 #!/usr/bin/python3
+"""singly-linked defination"""
 
-import sys
+
+class Node:
+    """Node class body."""
+
+    def __init__(self, data, next_node=None):
+        """Node contructor.
+        Args:
+            data (int): The data of the new Node.
+            next_node (Node): The next node of the new Node.
+        """
+        self.data = data
+        self.next_node = next_node
+
+    @property
+    def data(self):
+        """Setter and Getter of a Node."""
+        return (self.__data)
+
+    @data.setter
+    def data(self, value):
+        if not isinstance(value, int):
+            raise TypeError("data must be an integer")
+        self.__data = value
+
+    @property
+    def next_node(self):
+        """Getter and Setter of a  Node."""
+        return (self.__next_node)
+
+    @next_node.setter
+    def next_node(self, value):
+        if not isinstance(value, Node) and value is not None:
+            raise TypeError("next_node must be a Node object")
+        self.__next_node = value
 
 
-def safe_print_integer_err(value):
-    """Prints an integer with "{:d}".format()
+class SinglyLinkedList:
+    """Singly-linked defination"""
 
-    If a ValueError message is found, a corresponding
-    message is printed to standard error
+    def __init__(self):
+        """SinglyLinkedList contructor."""
+        self.__head = None
 
-    Args:
-        value (int): The integer to print
+    def sorted_insert(self, value):
+        """Insert a new Node to the SinglyLinkedList.
+        Args:
+            value (Node): The new Node to insert.
+        """
+        new = Node(value)
+        if self.__head is None:
+            new.next_node = None
+            self.__head = new
+        elif self.__head.data > value:
+            new.next_node = self.__head
+            self.__head = new
+        else:
+            tmp = self.__head
+            while (tmp.next_node is not None and
+                    tmp.next_node.data < value):
+                tmp = tmp.next_node
+            new.next_node = tmp.next_node
+            tmp.next_node = new
 
-    Returns:
-        If a TypeError or ValueError occurs, return False
-        Otherwise - True
-    """
-    try:
-        print("{:d}".format(value))
-        return (True)
-    except (TypeError, ValueError):
-        print("Exception: {}".format(sys.exc_info()[1]), file=sys.stderr)
-        return (False)
+    def __str__(self):
+        """Define the print() representation of a SinglyLinkedList."""
+        values = []
+        tmp = self.__head
+        while tmp is not None:
+            values.append(str(tmp.data))
+            tmp = tmp.next_node
+        return ('\n'.join(values))
